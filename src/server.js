@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const path = require('path');
 
 const albumsRoutes = require('./api/albums/routes');
 const AlbumsService = require('./services/postgres/AlbumsService');
@@ -18,6 +19,16 @@ const authenticationsRoutes = require('./api/authentications/routes');
 const AuthenticationsService = require('./services/postgres/AuthenticationsService');
 const AuthenticationsValidator = require('./validator/authentications');
 const TokenManager = require('./commons/tokenize/TokenManager');
+
+const ProducerService = require('./services/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+const exportsRoutes = require('./api/exports/routes');
+
+const StorageService = require('./services/storage/StorageService');
+const UploadsValidator = require('./validator/uploads');
+
+const CacheService = require('./services/redis/CacheService');
+const LikesService = require('./services/postgres/LikesService');
 
 const playlistsRoutes = require('./api/playlists/routes');
 const PlaylistsService = require('./services/postgres/PlaylistsService');
@@ -45,15 +56,21 @@ const init = async () => {
     const playlistsService = new PlaylistsService(collaborationsService);
     const playlistSongsService = new PlaylistSongsService();
     const playlistActivitiesService = new PlaylistActivitiesService();
+    const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
+    const cacheService = new CacheService();
+    const likesService = new LikesService(cacheService);
 
     app.use(express.json());
+    app.use('/upload/images', express.static(path.resolve(__dirname, 'api/uploads/file/images')));
 
-    app.use('/albums', albumsRoutes(albumsService, AlbumsValidator));
+    app.use('/albums', albumsRoutes(albumsService, AlbumsValidator, storageService, UploadsValidator, likesService));
     app.use('/songs', songsRoutes(songsService, SongsValidator));
     app.use('/users', usersRoutes(usersService, UsersValidator));
     app.use('/authentications', authenticationsRoutes(authenticationsService, usersService, TokenManager, AuthenticationsValidator));
     app.use('/playlists', authMiddleware, playlistsRoutes({ playlistsService, playlistSongsService, playlistActivitiesService }, PlaylistsValidator));
     app.use('/collaborations', authMiddleware, collaborationsRoutes(collaborationsService, playlistsService, usersService, CollaborationsValidator));
+    app.use('/export', authMiddleware, exportsRoutes(ProducerService, ExportsValidator, playlistsService));
+
 
 
     // eslint-disable-next-line no-unused-vars
