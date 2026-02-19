@@ -13,13 +13,14 @@ class StorageService {
         const filename = +new Date() + meta.filename;
         const path = `${this._folder}/${filename}`;
 
-        const fileStream = fs.createWriteStream(path);
-
         return new Promise((resolve, reject) => {
-            fileStream.on('error', (error) => reject(error));
-            fileStream.write(file.buffer);
-            fileStream.end(filename);
-        }).then((filename) => filename);
+            fs.writeFile(path, file.buffer, (error) => {
+                if (error) {
+                    return reject(error);
+                }
+                return resolve(filename);
+            });
+        });
     }
 }
 

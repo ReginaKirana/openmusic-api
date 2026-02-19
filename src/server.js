@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 
 const albumsRoutes = require('./api/albums/routes');
@@ -60,6 +61,7 @@ const init = async () => {
     const cacheService = new CacheService();
     const likesService = new LikesService(cacheService);
 
+    app.use(cors());
     app.use(express.json());
     app.use('/upload/images', express.static(path.resolve(__dirname, 'api/uploads/file/images')));
 

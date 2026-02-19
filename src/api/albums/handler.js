@@ -1,3 +1,5 @@
+const InvariantError = require('../../commons/exceptions/InvariantError');
+
 class AlbumsHandler {
     constructor(service, validator, storageService, uploadsValidator, likesService) {
         this._service = service;
@@ -21,9 +23,7 @@ class AlbumsHandler {
     async postUploadCoverHandler(req, res, next) {
         try {
             if (!req.file) {
-                const error = new Error('Missing file');
-                error.statusCode = 400; // Or better error handling
-                throw error;
+                throw new InvariantError('Missing file');
             }
 
             this._uploadsValidator.validateImageHeaders({ 'content-type': req.file.mimetype });
