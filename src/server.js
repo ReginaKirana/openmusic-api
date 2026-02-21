@@ -74,7 +74,6 @@ const init = async () => {
     app.use('/export', authMiddleware, exportsRoutes(ProducerService, ExportsValidator, playlistsService));
 
 
-
     // eslint-disable-next-line no-unused-vars
     app.use((err, req, res, next) => {
         require('fs').writeFileSync('server-error.log', `[${new Date().toISOString()}] ${err.stack}\n`, { flag: 'a' });

@@ -1,6 +1,4 @@
 
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
     pgm.createTable('playlists', {
         id: {
@@ -8,7 +6,7 @@ exports.up = (pgm) => {
             primaryKey: true,
         },
         name: {
-            type: 'TEXT',
+            type: 'VARCHAR(255)',
             notNull: true,
         },
         owner: {

@@ -1,6 +1,4 @@
 
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
     pgm.createTable('playlist_song_activities', {
         id: {
@@ -20,11 +18,11 @@ exports.up = (pgm) => {
             notNull: true,
         },
         action: {
-            type: 'TEXT',
+            type: 'VARCHAR(255)',
             notNull: true,
         },
         time: {
-            type: 'TEXT',
+            type: 'VARCHAR(255)',
             notNull: true,
         },
     });

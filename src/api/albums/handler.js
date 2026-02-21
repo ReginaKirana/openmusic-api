@@ -1,4 +1,5 @@
 const InvariantError = require('../../commons/exceptions/InvariantError');
+const autoBind = require('auto-bind');
 
 class AlbumsHandler {
     constructor(service, validator, storageService, uploadsValidator, likesService) {
@@ -8,16 +9,7 @@ class AlbumsHandler {
         this._uploadsValidator = uploadsValidator;
         this._likesService = likesService;
 
-        this.postUploadCoverHandler = this.postUploadCoverHandler.bind(this);
-        this.postLikeHandler = this.postLikeHandler.bind(this);
-        this.deleteLikeHandler = this.deleteLikeHandler.bind(this);
-        this.getLikesHandler = this.getLikesHandler.bind(this);
-
-        this.postAlbumHandler = this.postAlbumHandler.bind(this);
-        this.getAlbumByIdHandler = this.getAlbumByIdHandler.bind(this);
-        this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this);
-        this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this);
-        this.deleteAlbumByIdHandler = this.deleteAlbumByIdHandler.bind(this);
+        autoBind(this);
     }
 
     async postUploadCoverHandler(req, res, next) {

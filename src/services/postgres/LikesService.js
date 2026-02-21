@@ -71,7 +71,7 @@ class LikesService {
                 likes: JSON.parse(result),
                 isCache: true,
             };
-        } catch (error) {
+        } catch (error) { // eslint-disable-line no-unused-vars
             const query = {
                 text: 'SELECT COUNT(*) FROM user_album_likes WHERE album_id = $1',
                 values: [albumId],

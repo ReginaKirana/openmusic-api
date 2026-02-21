@@ -1,7 +1,7 @@
 exports.up = (pgm) => {
     pgm.addColumn('albums', {
         cover: {
-            type: 'TEXT',
+            type: 'VARCHAR(255)',
             default: null,
         },
     });

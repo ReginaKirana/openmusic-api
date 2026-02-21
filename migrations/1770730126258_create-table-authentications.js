@@ -1,10 +1,8 @@
 
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
     pgm.createTable('authentications', {
         token: {
-            type: 'TEXT',
+            type: 'VARCHAR(255)',
             notNull: true,
         },
     });

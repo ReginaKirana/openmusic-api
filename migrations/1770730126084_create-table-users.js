@@ -1,6 +1,4 @@
 
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
     pgm.createTable('users', {
         id: {
@@ -13,11 +11,11 @@ exports.up = (pgm) => {
             unique: true,
         },
         password: {
-            type: 'TEXT',
+            type: 'VARCHAR(255)',
             notNull: true,
         },
         fullname: {
-            type: 'TEXT',
+            type: 'VARCHAR(255)',
             notNull: true,
         },
     });
